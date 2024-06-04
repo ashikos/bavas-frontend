@@ -3,12 +3,35 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@headlessui/react": "^1.7.18",
+    "@nextui-org/react": "^2.2.10",
+    "@react-login-page/page2": "^1.0.4",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "antd": "^5.15.3",
+    "apexcharts": "^3.48.0",
+    "axios": "^1.6.7",
+    "chart.js": "^4.4.2",
+    "classnames": "^2.5.1",
+    "date-fns": "^3.4.0",
+    "flowbite": "^2.3.0",
+    "flowbite-datepicker": "^1.2.6",
+    "flowbite-react": "^0.7.5",
+    "framer-motion": "^11.0.20",
     "react": "^18.2.0",
+    "react-apexcharts": "^1.4.1",
+    "react-chartjs-2": "^5.2.0",
+    "react-date-range": "^2.0.0-alpha.4",
+    "react-datepicker": "^6.3.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^5.0.1",
+    "react-login-page": "^1.0.4",
+    "react-model": "^4.3.1",
+    "react-paginate": "^8.2.0",
+    "react-router-dom": "^6.22.3",
     "react-scripts": "5.0.1",
+    "react-tailwindcss-datepicker": "^1.6.6",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -34,5 +57,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
   }
 }
