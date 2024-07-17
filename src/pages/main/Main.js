@@ -14,12 +14,12 @@ const Main = () => {
             <Router>
               <Routes>
                 <Route path='/' element={<Layout/>}>
-                  <Route index element={<Dashboard/>} />
-                  <Route path='service' element={<Service/>} />
-                  <Route path='dashboard' element={<Dashboard/>} />
-                  <Route path='orders' element={<Orders/>} />
-                  <Route path='bills' element={<Bills/>} />
-                  <Route path='customers' element={<Customer/>} />
+                    <Route index element={<Dashboard/>} />
+                    <Route path='service' element={<Service/>} />
+                    <Route path='dashboard' element={<Dashboard/>} />
+                    <Route path='orders' element={<Orders/>} />
+                    <Route path='bills' element={<Bills/>} />
+                    <Route path='customers' element={<Customer/>} />
                 </Route>
                 <Route path='/login' element={<Login/>}>
                   

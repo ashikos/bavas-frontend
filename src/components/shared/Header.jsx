@@ -4,21 +4,20 @@ import { FaSearch, FaBell } from "react-icons/fa";
 import { MdMessage } from "react-icons/md";
 import { Popover, Transition } from '@headlessui/react'
 import classNames from 'classnames';
-import {Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
-import {Avatar} from "@nextui-org/react";
+import { Avatar } from "flowbite-react";
 
 const Header = () => {
 
   const {pathname} = useLocation()
+
   const capitalizedPath = pathname.slice(1).charAt(0).toUpperCase() + pathname.slice(2);
-  console.log(121212, capitalizedPath);
 
   return (
     <div className='items-center px-5 h-[8vh]  bg-white flex justify-between border-b border-gray-200 '>
         <div className="relative">
             <h1 className='pl-10 text-4xl font-bold font-serif'> {capitalizedPath}</h1>
-            
         </div>
         <div className="flex gap-4 mr-4 ">
         <Popover className="relative">

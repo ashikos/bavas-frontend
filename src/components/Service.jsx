@@ -331,7 +331,7 @@ const handleDelete = async (id)=> {
                       </h3>
                       <div className="flex justify-center gap-4">
                         <Button color="failure"  onClick={() => handleDelete(delModal)}>
-                          {"Yes, I'm sure"}
+                          Yes, I'm sure
                         </Button>
                         <Button color="gray" onClick={() => setDelModal(false)}>
                           No, cancel
