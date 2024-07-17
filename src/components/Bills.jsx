@@ -96,7 +96,7 @@ const handlePen = async (bill)=> {
 
     console.log(1111, patch_data);
     
-    axios.patch(`http://localhost:8000/sales/bill/${id}/`, patch_data)
+    axios.patch(`/sales/bill/${id}/`, patch_data)
     .then(response=>{
       console.log('PATCH request successful:', response.data);
       fetchData()
@@ -119,7 +119,7 @@ const handlePen = async (bill)=> {
 
       try {
         // Make the POST request using Axios
-        const response = await axios.post('http://localhost:8000/sales/bill/', JSON.stringify(add_data), {
+        const response = await axios.post('/sales/bill/', JSON.stringify(add_data), {
           headers: {
             'Content-Type': 'application/json'
           }
