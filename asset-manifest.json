@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/bavas-frontend/static/css/main.a0e2eb43.css",
+    "main.js": "/bavas-frontend/static/js/main.01821414.js",
+    "index.html": "/bavas-frontend/index.html",
+    "main.a0e2eb43.css.map": "/bavas-frontend/static/css/main.a0e2eb43.css.map",
+    "main.01821414.js.map": "/bavas-frontend/static/js/main.01821414.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a0e2eb43.css",
+    "static/js/main.01821414.js"
+  ]
+}
