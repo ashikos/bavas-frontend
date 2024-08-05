@@ -16,7 +16,7 @@ const Login = () => {
       "password": creds['password']
     }
     console.log( credData);
-    axios.post(`http://localhost:8000/sales/login/`, credData)
+    axios.post(`/sales/login/`, credData)
     .then(response=>{
       console.log('Successfully LogedIn:', response.status);
       if (response.status === 200){

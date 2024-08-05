@@ -26,7 +26,7 @@ const Bills = () => {
   const [pages, setpages ] = useState(0)
   const [paginate, setPage  ] = useState(
     {'offset':0, "limit":10, "prev":null, "next": null})
-    const [data, setData  ] = useState(
+  const [data, setData  ] = useState(
       {"customer":"", "reg_no":"", "received":false, "amount":null, "balance":0, "date":null})
   
     const [keyWrd, setKeyWrd  ] = useState(
@@ -48,7 +48,7 @@ const Bills = () => {
         let entry_count = response.data.count
         let result = Math.ceil(entry_count / paginate['limit']);
         setpages(result)
-        console.log(22222,response.data.results);
+        console.log(response.data.results);
     } catch (error) {
         console.error('Error fetching data:', error);
     }
@@ -93,8 +93,6 @@ const handlePen = async (bill)=> {
     patch_data["amount"] = t_amount
     patch_data["date"] = format(data["date"], "yyyy-MM-dd")
     patch_data["items"] = inputs
-
-    console.log(1111, patch_data);
     
     axios.patch(`/sales/bill/${id}/`, patch_data)
     .then(response=>{
@@ -240,7 +238,8 @@ const handlePrint = async(id)=>{
                 required variant="outlined" />
               </div>
               <div className="mb-5 block  w-[33%]">
-                <DatePic  setFile={setData} date={data["date"]}/>
+                {/* <DatePic  setFile={setData} date={data["date"]}/> */}
+                <input type="date" className='border-gray-300 rounded-md text-gray-500' name="" onChange={(e)=>setKeyWrd(prestat=>({...prestat, "end":e.target.value}))} />
               </div>
             </div>
             <AddInput inputs={inputs} setInputs={setInputs} set_amount={set_amount}/>
@@ -353,7 +352,9 @@ const handlePrint = async(id)=>{
                 required variant="outlined" />
               </div>
               <div className="mb-5 block  w-[33%]">
-                <DatePic  setFile={setData} date={data["date"]}/>
+                {/* <DatePic  setFile={setData} date={data["date"]}/>
+                {console.log(data.date)} */}
+                <input type="date" className='border-gray-300 rounded-md text-gray-500' value={data['date']} onChange={(e)=>setKeyWrd(prestat=>({...prestat, "end":e.target.value}))} />
               </div>
             </div>
             <AddInput inputs={inputs} setInputs={setInputs} set_amount={set_amount}/>

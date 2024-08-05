@@ -86,7 +86,7 @@ const handlePen = async (customer)=> {
   const handleEditButton =  async()=>{
     let id = editModal.id
     
-    axios.patch(`/sales/customer/${id}/`, data)
+    axios.patch(`sales/customer/${id}/`, data)
     .then(response=>{
       console.log('PATCH request successful:', response.data);
       fetchData()
@@ -150,7 +150,7 @@ const handlePen = async (customer)=> {
 const handleDelete = async (id)=> {
 
   await axios.delete(
-    `/sales/customer/${id}/`)
+    `sales/customer/${id}/`)
     .catch(error => {
       // Handle error
       console.error('Error deleting Customer:', error);

@@ -16,6 +16,7 @@ import axios from "../axios"
 import Pagination from './shared/Pagination';
 import File from './utils/File';
 import DatePic from './utils/DatePic';
+import Alertbox from './utils/Alertbox';
 // import DelModal from './utils/DelModal';
 
 
@@ -36,6 +37,7 @@ const Service = () => {
   const [addModal, setAddModal] = useState(false);
   const [uploadModal, setuploadModal] = useState(false);
   const [excel, setExcel] = useState({"file":null, "date":format(new Date(), "dd-MM-yyyy")});
+  const [errorMessage, setError] = useState({title:null, color:"success", message:null});
 
 
   const fetchData = async () => {   
@@ -83,6 +85,11 @@ const handlePen = async (item)=> {
         fetchData();
     }, [paginate, keyWrd]);
 
+    async function handleAlertBox(){
+    await new Promise(resolve => setTimeout(resolve, 3000)); 
+    setError(prestat=>({...prestat, message:null, title:null}))
+  }
+
   const handleUploadBtn = async ()=>{
         console.log(excel["date"]);
         if (!excel["file"]){
@@ -99,10 +106,14 @@ const handlePen = async (item)=> {
         .then(response => {
           // Handle success response
           console.log('File uploaded successfully');
+          setError(prestat=>({...prestat,title:'Success', message:'File uploaded successfully', color:"success"}))
+          handleAlertBox()
         })
         .catch(error => {
           // Handle error
           console.error('Error uploading file:', error);
+          setError(prestat=>({...prestat,title:'Info Alert', message:error.response.data.detail, color:"failure"}))
+          handleAlertBox()
         })
         .finally(() => {
           setModalClose();
@@ -135,7 +146,6 @@ const handlePen = async (item)=> {
     console.log(value);
     setData(prestat=>({...prestat,"date":value}))
     }
-    console.log(343434343, data);
       if (data['vehicle']==="" && data['reg_no']==="")  {
           return ;
       }
@@ -173,10 +183,17 @@ const handleDelete = async (id)=> {
     setDelModal(false)
   }
 
+  const handleDate =  (e)=> {
+
+   console.log(e.target.value);
+   }
+
+  
+
      
   return (
     
-    <div className='bg-white h-[92vh] overflow-x-auto'>
+    <div className='bg-white h-[92vh] overflow-x-auto relative'>
 
       {/* search and filter */}
       <div className="p-10 pb-3 pr-[6vh] items-center flex justify-between"> 
@@ -186,16 +203,21 @@ const handleDelete = async (id)=> {
               <input onChange={(e)=>{setKeyWrd(prestat=>({...prestat, "search":e.target.value}))}} className='border h-10 w-[24rem] px-2 pl-9 rounded-md border-gray-300  outline-none active:outline-none ' type="text" placeholder='search...' value={keyWrd["search"]} />
 
         </div>
-        <FlowBiteDate className='border-gray-800'
-        maxDate={new Date() } 
-        placeholder='select date'
-        onSelectedDateChanged={(date)=>{setKeyWrd(prestat=>({...prestat, "start":format(date, 'yyyy-MM-dd')}))}}
-        />
-        <span class=" text-gray-500 py-2">to</span>
-        <FlowBiteDate className='border-gray-800'
-        maxDate={new Date()} 
-        onSelectedDateChanged={(date)=>{setKeyWrd(prestat=>({...prestat, "end":format(date, 'yyyy-MM-dd')}))}}/>
+        <div className="flex gap-4 ml-16">
+            {/* <FlowBiteDate className='border-gray-800'
+          maxDate={new Date() } 
+          placeholder='select date'
+          onSelectedDateChanged={(date)=>{setKeyWrd(prestat=>({...prestat, "start":format(date, 'yyyy-MM-dd')}))}}
+          /> */}
+          <input type="date" className='border-gray-300 rounded-md text-gray-500' name="" onChange={(e)=>setKeyWrd(prestat=>({...prestat, "start":e.target.value}))} />
+          <span class=" text-gray-500 py-2">to</span>
+          <input type="date" className='border-gray-300 rounded-md text-gray-500' name="" onChange={(e)=>setKeyWrd(prestat=>({...prestat, "end":e.target.value}))} />
+          {/* <FlowBiteDate className='border-gray-800'
+          maxDate={new Date()} 
+          onSelectedDateChanged={(date)=>{setKeyWrd(prestat=>({...prestat, "end":format(date, 'yyyy-MM-dd')}))}}/> */}
+        </div>
       </div>
+      
      
       <div className="flex gap-4 h-10">
         <button onClick={() => setAddModal(true)} className='hover:bg-gray-900 hover:text-white font-medium cursor-pointer border border-gray-900 rounded-lg text-black w-[7rem]'> Add</button>
@@ -415,6 +437,9 @@ const handleDelete = async (id)=> {
         </div>    
       </div>
       <div>
+
+      <Alertbox errorMessage={errorMessage}/>
+
       </div>
           
       

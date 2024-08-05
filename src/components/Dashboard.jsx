@@ -46,7 +46,7 @@ const fetchGraphdata = async () => {
 
     return (
 
-        <div className='bg-gray-200 h-screen '>
+        <div className='bg-gray-200 h-[53rem]'>
           <div className='h-[5%]'>
           <div className='h-[5%] px-10 py-3 '>
           <Dropdown label={year} dismissOnClick={true} color={""}>

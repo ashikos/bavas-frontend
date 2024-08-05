@@ -11,10 +11,11 @@ const Layout = () => {
     <div className='flex flex-row h-full w-screen bg-neutral-300'>
         <Sidebar />
         <div className='flex-1'>
+          <div className="">
           <Header/>
-          <div className="relative">
+          </div>
+          <div className="relative flex-grow">
             {<Outlet/>}
-            <Alertbox className='absolute ' />
           </div>
           
         </div>

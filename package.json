@@ -1,5 +1,4 @@
 {
-  "homepage":"https://ashikos.github.io/bavas-frontend",
   "name": "bavas",
   "version": "0.1.0",
   "private": true,
@@ -20,7 +19,6 @@
     "flowbite-datepicker": "^1.2.6",
     "flowbite-react": "^0.7.8",
     "framer-motion": "^11.0.20",
-    "gh-pages": "^6.1.1",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
     "react-chartjs-2": "^5.2.0",
@@ -38,8 +36,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "predeploy":"npm run build",
-    "deploy":"gh-pages -d build",
+  
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
