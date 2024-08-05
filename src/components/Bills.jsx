@@ -161,17 +161,22 @@ const handlePen = async (bill)=> {
       
     }
 
-const handleDelete = async (id)=> {
+    const handleDelete = async (id)=> {
 
-  axios.delete(
-    `/sales/bill/${id}/`)
-    .catch(error => {
-      // Handle error
-      console.error('Error deleting bill:', error);
-    })
-    fetchData()
-    setDelModal(false)
-  }
+      try{
+        axios.delete(
+          `sales/bill/${id}/`);
+      } catch(error){
+        console.error('Error uploading data:', error);
+        // setError(prestat=>({...prestat,title:'Info Alert', message:error.response.data.detail, color:"failure"}))
+        // handleAlertBox()
+      }
+      finally{
+        fetchData()
+        setDelModal(false)
+      }
+      fetchData()
+      }
 
 const handlePrint = async(id)=>{
   try{

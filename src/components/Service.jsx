@@ -36,7 +36,7 @@ const Service = () => {
   const [delModal, setDelModal] = useState(false);
   const [addModal, setAddModal] = useState(false);
   const [uploadModal, setuploadModal] = useState(false);
-  const [excel, setExcel] = useState({"file":null, "date":format(new Date(), "dd-MM-yyyy")});
+  const [excel, setExcel] = useState({"file":null, "date":format(new Date(), "yyyy-MM-dd")});
   const [errorMessage, setError] = useState({title:null, color:"success", message:null});
 
 
@@ -176,20 +176,25 @@ const handlePen = async (item)=> {
 
 const handleDelete = async (id)=> {
 
-   axios.delete(
-    `sales/entry/${id}/`);
-
+  try{
+    axios.delete(
+      `sales/entry/${id}/`);
+  } catch(error){
+    console.error('Error uploading data:', error);
+    setError(prestat=>({...prestat,title:'Info Alert', message:error.response.data.detail, color:"failure"}))
+    handleAlertBox()
+  }
+  finally{
     fetchData()
     setDelModal(false)
+  }
+  fetchData()
   }
 
   const handleDate =  (e)=> {
 
    console.log(e.target.value);
    }
-
-  
-
      
   return (
     
