@@ -1,65 +1,150 @@
-import { Button, Checkbox, Label, TextInput } from "flowbite-react";
-import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import axios from "axios";
-
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios from '../../axios';
+import { useNavigate } from 'react-router';
+import Alertbox from '../../components/utils/Alertbox';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 const Login = () => {
+  const [creds, SetCreds] = useState({ username: '', password: '' });
+  const [errorMessage, setError] = useState({ title: '', color: 'success', message: null });
+  const [loading, setLoading] = useState(false);
 
-  const [creds, setCreds] = useState({"username":null, "password":null})
-  // const [redirect, setRedirect] = useState(false);
   const navigate = useNavigate();
-  
-  const checkCreds =  (event)=>{
-    event.preventDefault();
-    const credData = {
-      "username": creds['username'],
-      "password": creds['password']
-    }
-    console.log( credData);
-    axios.post(`/sales/login/`, credData)
-    .then(response=>{
-      console.log('Successfully LogedIn:', response.status);
-      if (response.status === 200){
-        navigate('/')
-      }
-    }).catch(error=>{
-      console.error('Error making POST request:', error);
-      if (error.response.status === 403){
-        alert(error.response.data.detail)
-        console.log(error.response.data.detail);
-      }
-    })
-    
 
-    
+  async function handleAlertBox() {
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    setError((prestat) => ({ ...prestat, message: null, title: null }));
   }
 
-  
-  return (
-    <div className=" w-full flex justify-center items-center bg-gray-800">
-     <div id="inner" className="w-[35%] flex justify-center items-center py-[10%] border border-spacing-8 bg-gray-700 rounded-[15px] bg-opacity-4">
-     <form className="flex max-w-md flex-col gap-4 w-[100%]" onSubmit={checkCreds}>
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="email1" value="Your email"  className="text-white"/>
-        </div>
-        <TextInput id="email1" onChange={(e)=>setCreds(prestat => ({...prestat, "username": e.target.value} ))}  type="email" required placeholder="name@flowbite.com"  />
-      </div>
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="password1" value="Your password" className="text-white"/>
-        </div>
-        <TextInput onChange={(e)=>setCreds(prestat => ({...prestat, "password": e.target.value} ))}  id="password1" required type="password"  />
-      </div>
-      <div className="flex items-center gap-2">
-        <Checkbox id="remember" />
-        <Label htmlFor="remember" className="text-white">Remember me</Label>
-      </div>
-      <Button  type="submit">Submit</Button>
-    </form>
-     </div>
-    </div>
-  )
-}
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(creds);
 
-export default Login
+    axios
+      .post('bills/login/', creds, {
+        headers: {},
+      })
+      .then((response) => {
+        console.log('Post request successful:', response.data);
+        const user_id = response.data.id;
+        const user_type = response.data.user_type;
+        let is_registered = response.data.is_registered;
+        localStorage.setItem('userId', user_id);
+        localStorage.setItem('firstName', response.data.first_name);
+        localStorage.setItem('userType', response.data.user_type);
+        localStorage.setItem('educationId', response.data.advanced_info.education);
+        localStorage.setItem('professionId', response.data.advanced_info.profession);
+        localStorage.setItem('familyId', response.data.advanced_info.family);
+        localStorage.setItem('ClientId', response.data.advanced_info.client);
+        localStorage.setItem('preferenceId', response.data.advanced_info.preference);
+        localStorage.setItem('isEmploy', response.data.is_employ);
+
+        if (user_type === 101) {
+          navigate('/admin/');
+        } else if (user_type === 102) {
+          navigate(`${is_registered ? '/dashboard' : '/user/base/'}`);
+          setError({ title: 'Success', color: 'success', message: 'Logged in successfully' });
+          handleAlertBox();
+        }
+      })
+      .catch((error) => {
+        console.error('Error making POST request:', error);
+        setError((prestat) => ({ ...prestat, title: 'Info Alert', message: error.response.data.detail, color: 'failure' }));
+        handleAlertBox();
+      });
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    SetCreds((prestat) => ({ ...prestat, [name]: value }));
+    console.log(creds);
+  };
+
+  const handleGoogleSuccess = (response) => {
+    console.log('Google login response:', response);
+    const token = response.credential;
+    axios
+      .post('bills/google-login/', { token }, {
+        headers: {},
+      })
+      .then((response) => {
+        console.log('Google login successful:', response.data);
+        const user_id = response.data.id;
+        const user_type = response.data.user_type;
+        let is_registered = response.data.is_registered;
+        localStorage.setItem('userId', user_id);
+        localStorage.setItem('firstName', response.data.first_name);
+        localStorage.setItem('userType', response.data.user_type);
+        localStorage.setItem('educationId', response.data.advanced_info.education);
+        localStorage.setItem('professionId', response.data.advanced_info.profession);
+        localStorage.setItem('familyId', response.data.advanced_info.family);
+        localStorage.setItem('ClientId', response.data.advanced_info.client);
+        localStorage.setItem('preferenceId', response.data.advanced_info.preference);
+        localStorage.setItem('isEmploy', response.data.is_employ);
+
+        if (user_type === 101) {
+          navigate('/admin/');
+        } else if (user_type === 102) {
+          navigate(`${is_registered ? '/dashboard' : '/user/base/'}`);
+          setError({ title: 'Success', color: 'success', message: 'Logged in successfully' });
+          handleAlertBox();
+        }
+      })
+      .catch((error) => {
+        console.error('Error making Google login request:', error);
+        setError((prestat) => ({ ...prestat, title: 'Info Alert', message: error.response.data.detail, color: 'failure' }));
+        handleAlertBox();
+      });
+  };
+
+  const handleGoogleFailure = (error) => {
+    console.error('Google login failed:', error);
+    setError({ title: 'Google Login Failed', message: 'Unable to login with Google. Please try again.', color: 'failure' });
+    handleAlertBox();
+  };
+
+  return (
+    <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
+      <div className="bg-gray-100 flex items-center justify-center h-screen">
+        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
+          <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label htmlFor="email" className="block text-md font-medium text-gray-700 mb-2">Email</label>
+              <input type="email" id="email" name="username" onChange={handleChange} className="block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
+            <div className="mb-6">
+              <label htmlFor="password" className="block text-md font-medium text-gray-700 mb-2">Password</label>
+              <input type="password" id="password" name="password" onChange={handleChange} className="block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center">
+                <input type="checkbox" id="remember" name="remember" onChange={handleChange} className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
+                <label htmlFor="remember" className="ml-2 block text-md text-gray-900">Remember me</label>
+              </div>
+              <div className="text-md">
+                <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">Forgot your password?</a>
+              </div>
+            </div>
+            <button type="submit" className="w-full bg-indigo-600 mb-3 text-white py-3 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Sign in</button>
+            <div className="text-center">
+              <p className="text-gray-700">Not registered yet?</p>
+              <Link to="/register">
+                <span className="pl-2">Signup</span>
+              </Link>
+            </div>
+          </form>
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onFailure={handleGoogleFailure}
+            cookiePolicy={'single_host_origin'}
+            className="mt-4"
+          />
+        </div>
+        <Alertbox errorMessage={errorMessage} />
+      </div>
+    </GoogleOAuthProvider>
+  );
+};
+
+export default Login;

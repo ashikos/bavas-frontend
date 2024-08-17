@@ -41,12 +41,6 @@ export const DASHBOARD_SIDEBAR_LINKS = [
 		path: '/orders',
 		icon: <HiOutlineShoppingCart />
 	},
-	{
-		key: 'messages',
-		label: 'Messages',
-		path: '/customers',
-		icon: <HiOutlineAnnotation />
-	}
 ]
 
 export const DASHBOARD_SIDEBAR_BOTTOM_LINKS = [

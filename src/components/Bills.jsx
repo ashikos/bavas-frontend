@@ -20,14 +20,13 @@ import AddInput from './utils/AddInput';
 
 
 const Bills = () => {
-
   
+  const today = new Date().toISOString().split('T')[0];
+
   const [entry, setEntry ] = useState([])
   const [pages, setpages ] = useState(0)
   const [paginate, setPage  ] = useState(
     {'offset':0, "limit":10, "prev":null, "next": null})
-  const [data, setData  ] = useState(
-      {"customer":"", "reg_no":"", "received":false, "amount":null, "balance":0, "date":null})
   
     const [keyWrd, setKeyWrd  ] = useState(
       {'search':"", "start":"", "end":""})
@@ -36,6 +35,9 @@ const Bills = () => {
   const [addModal, setAddModal] = useState(false);
   const [inputs, setInputs] = useState([{"item":"", "amount":0}]);
   const [t_amount, set_amount] = useState(0);
+  const [data, setData  ] = useState(
+    {"customer":"", "reg_no":"", "received":false, "amount":null,
+      "balance":0, "date":today})
 
 
 
@@ -55,7 +57,7 @@ const Bills = () => {
 };
 
 const setDatanull = ()=> {
-  setData({"customer":"", "reg_no":"", "contact":"", "type":"", "amount":null, "gpay":null, "date":null, "received": false})
+  setData({"customer":"", "reg_no":"", "contact":"", "type":"", "amount":null, "gpay":null, "date":today, "received": false})
   setInputs([{"item":"", "amount":0}]);
 }
 
@@ -74,7 +76,7 @@ const handlePen = async (bill)=> {
         "amount":bill.amount,
         "balance":bill.balance,
         "received":bill.received, 
-        "date":new Date(bill.date)})
+        "date":new Date(bill.date).toISOString().split('T')[0]})
     setInputs(bill.items)
 }
 
@@ -115,6 +117,9 @@ const handlePen = async (bill)=> {
       add_data["items"] = inputs
       add_data["amount"] = t_amount
 
+      console.log(add_data);
+      
+
       try {
         // Make the POST request using Axios
         const response = await axios.post('/sales/bill/', JSON.stringify(add_data), {
@@ -138,26 +143,6 @@ const handlePen = async (bill)=> {
       }
         fetchData();
 
-
-
-      // fetch('http://localhost:8000/sales/bill/', {
-      //   method: 'POST',
-      //   headers: {"Content-Type":'application/json'},
-      //   body: JSON.stringify(add_data)
-      // }).then(response=>{
-      //   if (!response.ok){
-      //     setDatanull()
-      //     setAddModal(false)
-      //     throw new Error('Entry not updated')
-      //   }else{
-      //     console.log('Entry uploaded successfully');
-      //     setDatanull()
-      //     setAddModal(false)
-      //   }
-      // }).catch(error => {
-      //   // Handle error
-      //   console.error('Error uploading data:', error);
-      // })
       
     }
 
@@ -224,12 +209,12 @@ const handlePrint = async(id)=>{
       <button onClick={() => setAddModal(true)} className='hover:bg-gray-900 hover:text-white font-medium cursor-pointer border border-gray-900 rounded-lg text-black w-[7rem]'> Add Bill</button>
       </div>
 
-      {/* modal for adding an entry */}
+      {/* modal for adding an bill */}
       <Modal show={addModal} size="7xl" onClose={setModalClose} popup>
         <Modal.Header />
         <Modal.Body>
           <div className="space-y-6">
-            <h3 className="text-3xl font-semibold text-gray-900 dark:text-white">Edit Vehicle</h3>
+            <h3 className="text-3xl font-semibold text-gray-900 dark:text-white">Add Bill</h3>
             <div className='flex items-center justify-center gap-4 font-sans text-3xl'>
               <div className="mb-2 block w-[33%] ">
             
@@ -244,7 +229,12 @@ const handlePrint = async(id)=>{
               </div>
               <div className="mb-5 block  w-[33%]">
                 {/* <DatePic  setFile={setData} date={data["date"]}/> */}
-                <input type="date" className='border-gray-300 rounded-md text-gray-500' name="" onChange={(e)=>setKeyWrd(prestat=>({...prestat, "end":e.target.value}))} />
+                <input value={data["date"]} 
+                  type="date" 
+                  className='border-gray-300 rounded-md text-gray-500' 
+                  name="" 
+                  onChange={(e)=>setData(prestat=>({...prestat, "date":e.target.value}))} />
+
               </div>
             </div>
             <AddInput inputs={inputs} setInputs={setInputs} set_amount={set_amount}/>
@@ -359,7 +349,14 @@ const handlePrint = async(id)=>{
               <div className="mb-5 block  w-[33%]">
                 {/* <DatePic  setFile={setData} date={data["date"]}/>
                 {console.log(data.date)} */}
-                <input type="date" className='border-gray-300 rounded-md text-gray-500' value={data['date']} onChange={(e)=>setKeyWrd(prestat=>({...prestat, "end":e.target.value}))} />
+                {console.log(data['date'])
+                }
+                <input value={data["date"]} 
+                  type="date" 
+                  className='border-gray-300 rounded-md text-gray-500' 
+                  name="" 
+                  onChange={(e)=>setData(prestat=>({...prestat, "date":e.target.value}))} />
+
               </div>
             </div>
             <AddInput inputs={inputs} setInputs={setInputs} set_amount={set_amount}/>

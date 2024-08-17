@@ -17,18 +17,20 @@ import Pagination from './shared/Pagination';
 import File from './utils/File';
 import DatePic from './utils/DatePic';
 import Alertbox from './utils/Alertbox';
+import { Dropdown } from 'flowbite-react';
 // import DelModal from './utils/DelModal';
 
 
 const Service = () => {
 
+  const today = new Date().toISOString().split('T')[0];
   
   const [entry, setEntry ] = useState([])
   const [pages, setpages ] = useState(0)
   const [paginate, setPage  ] = useState(
     {'offset':0, "limit":10, "prev":null, "next": null})
     const [data, setData  ] = useState(
-      {"vehicle":"", "reg_no":"", "contact":"", "type":"", "amount":null, "gpay":null, "date":null})
+      {"vehicle":"", "reg_no":"", "contact":"", "type":"", "amount":null, "gpay":null, "date":today})
   
     const [keyWrd, setKeyWrd  ] = useState(
       {'search':"", "start":"", "end":""})
@@ -38,13 +40,14 @@ const Service = () => {
   const [uploadModal, setuploadModal] = useState(false);
   const [excel, setExcel] = useState({"file":null, "date":format(new Date(), "yyyy-MM-dd")});
   const [errorMessage, setError] = useState({title:null, color:"success", message:null});
+  const [year, setYear] = useState(new Date(Date.now()).getFullYear())
 
 
   const fetchData = async () => {   
     // api to call entries of bavas  
     try {
         const response = await axios.get(
-          `sales/entry/?offset=${paginate["offset"] * paginate["limit"]}&limit=${paginate["limit"]}&search=${keyWrd["search"]}&start_date=${keyWrd["start"]}&end_date=${keyWrd["end"]}`);
+          `sales/entry/?offset=${paginate["offset"] * paginate["limit"]}&limit=${paginate["limit"]}&year=${year}&search=${keyWrd["search"]}&start_date=${keyWrd["start"]}&end_date=${keyWrd["end"]}`);
         setEntry(response.data.results)
         console.log(entry);
         let entry_count = response.data.count
@@ -56,7 +59,7 @@ const Service = () => {
 };
 
 const setDatanull = ()=> {
-  setData({"vehicle":"", "reg_no":"", "contact":"", "type":"", "amount":null, "gpay":null, "date":null})
+  setData({"vehicle":"", "reg_no":"", "contact":"", "type":"", "amount":null, "gpay":null, "date":today})
   setExcel({"file":null, "date":format(new Date(), "dd-MM-yyyy")})
 }
 
@@ -78,12 +81,13 @@ const handlePen = async (item)=> {
         "type":item.type, 
         "amount":item.amount,
         "gpay":item.gpay, 
-        "date":new Date(item.date)    })
+        "date":new Date(item.date).toISOString().split('T')[0]
+      })
 }
 
   useEffect(() => {
         fetchData();
-    }, [paginate, keyWrd]);
+    }, [paginate, keyWrd, year]);
 
     async function handleAlertBox(){
     await new Promise(resolve => setTimeout(resolve, 3000)); 
@@ -192,7 +196,6 @@ const handleDelete = async (id)=> {
   }
 
   const handleDate =  (e)=> {
-
    console.log(e.target.value);
    }
      
@@ -203,23 +206,26 @@ const handleDelete = async (id)=> {
       {/* search and filter */}
       <div className="p-10 pb-3 pr-[6vh] items-center flex justify-between"> 
       <div className="flex gap-4">
+      <div className=''>
+          <Dropdown label={year} dismissOnClick={true} color={""}>
+            <Dropdown.Item onClick={()=>setYear('')}>All</Dropdown.Item>
+            <Dropdown.Item onClick={()=>setYear(2021)}>2021</Dropdown.Item>
+            <Dropdown.Item onClick={()=>setYear(2022)}>2022</Dropdown.Item>
+            <Dropdown.Item onClick={()=>setYear(2023)}>2023</Dropdown.Item>
+            <Dropdown.Item onClick={()=>setYear(2024)}>2024</Dropdown.Item>
+            <Dropdown.Item onClick={()=>setYear(2025)}>2025</Dropdown.Item>
+            <Dropdown.Item onClick={()=>setYear(2026)}>2026</Dropdown.Item>
+          </Dropdown>
+          </div>
         <div className="relative">
               <FaSearch size={20} className='absolute ml-2 top-1/2 -translate-y-1/2 text-neutral-400' />
               <input onChange={(e)=>{setKeyWrd(prestat=>({...prestat, "search":e.target.value}))}} className='border h-10 w-[24rem] px-2 pl-9 rounded-md border-gray-300  outline-none active:outline-none ' type="text" placeholder='search...' value={keyWrd["search"]} />
 
         </div>
         <div className="flex gap-4 ml-16">
-            {/* <FlowBiteDate className='border-gray-800'
-          maxDate={new Date() } 
-          placeholder='select date'
-          onSelectedDateChanged={(date)=>{setKeyWrd(prestat=>({...prestat, "start":format(date, 'yyyy-MM-dd')}))}}
-          /> */}
           <input type="date" className='border-gray-300 rounded-md text-gray-500' name="" onChange={(e)=>setKeyWrd(prestat=>({...prestat, "start":e.target.value}))} />
           <span class=" text-gray-500 py-2">to</span>
           <input type="date" className='border-gray-300 rounded-md text-gray-500' name="" onChange={(e)=>setKeyWrd(prestat=>({...prestat, "end":e.target.value}))} />
-          {/* <FlowBiteDate className='border-gray-800'
-          maxDate={new Date()} 
-          onSelectedDateChanged={(date)=>{setKeyWrd(prestat=>({...prestat, "end":format(date, 'yyyy-MM-dd')}))}}/> */}
         </div>
       </div>
       
@@ -250,7 +256,13 @@ const handleDelete = async (id)=> {
             </div>
             <div>
             <div className="mb-5 block w-[100%]">
-            <DatePic  setFile={setData}/>
+            {/* <DatePic  setFile={setData}/> */}
+            <input value={data["date"]} 
+                  type="date" 
+                  className='w-full border-gray-300 rounded-md text-gray-500' 
+                  name="" 
+                  onChange={(e)=>setData(prestat=>({...prestat, "date":e.target.value}))} />
+
               </div>
               <div className='flex items-center justify-start gap-4 font-sans text-3xl'>
               <div className="mt-4 block w-[50%] ">
