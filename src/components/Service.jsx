@@ -17,7 +17,9 @@ import Pagination from './shared/Pagination';
 import File from './utils/File';
 import DatePic from './utils/DatePic';
 import Alertbox from './utils/Alertbox';
+import Loader from './utils/Loader';
 import { Dropdown } from 'flowbite-react';
+import MonthPic from './utils/MonthPic';
 // import DelModal from './utils/DelModal';
 
 
@@ -28,7 +30,7 @@ const Service = () => {
   const [entry, setEntry ] = useState([])
   const [pages, setpages ] = useState(0)
   const [paginate, setPage  ] = useState(
-    {'offset':0, "limit":10, "prev":null, "next": null})
+    {'offset':0, "limit":30, "prev":null, "next": null})
     const [data, setData  ] = useState(
       {"vehicle":"", "reg_no":"", "contact":"", "type":"", "amount":null, "gpay":null, "date":today})
   
@@ -41,6 +43,7 @@ const Service = () => {
   const [excel, setExcel] = useState({"file":null, "date":format(new Date(), "yyyy-MM-dd")});
   const [errorMessage, setError] = useState({title:null, color:"success", message:null});
   const [year, setYear] = useState(new Date(Date.now()).getFullYear())
+  const [loading, setLoading] = useState(false)
 
 
   const fetchData = async () => {   
@@ -102,8 +105,11 @@ const handlePen = async (item)=> {
         }
       
       const formData = new FormData(); 
+      setLoading(true)
       formData.append("excel", excel["file"]);
       formData.append("date", excel["date"]);
+
+      console.log('form data is', excel["date"])
 
 
         axios.post('sales/excel/', formData)
@@ -122,6 +128,7 @@ const handlePen = async (item)=> {
         .finally(() => {
           setModalClose();
           fetchData();
+          setLoading(false)
         });
       };
 
@@ -303,7 +310,11 @@ const handleDelete = async (id)=> {
         <Modal.Header>Upload file here</Modal.Header>
         <Modal.Body>
           <div className="mb-2">
-              <DatePic setFile={setExcel} excel={excel}/>
+              {/* <DatePic setFile={setExcel} excel={excel}/> */}
+              <input type="month" required
+                      onChange={(event) => setExcel(prevset=>({...prevset, "date":event.target.value}))}
+                />
+
           </div>
 
           <div className="space-y-6">
@@ -314,7 +325,9 @@ const handleDelete = async (id)=> {
           <button onClick={setModalClose} className='hover:bg-gray-100 font-medium cursor-pointer border border-gray-900 rounded-lg mt-2 text-black w-[7rem] h-10 bg-white'> Cancel</button>
           </div>
         </Modal.Body>
+        <Loader loading={loading} setLoading={setLoading}/>
       </Modal>
+       
       </div>
 
 
@@ -456,6 +469,7 @@ const handleDelete = async (id)=> {
       <div>
 
       <Alertbox errorMessage={errorMessage}/>
+      
 
       </div>
           

@@ -4,6 +4,9 @@ import axios from '../../axios';
 import { useNavigate } from 'react-router';
 import Alertbox from '../../components/utils/Alertbox';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import loginimg from '../../assets/image/loginimg.png'
+import { GiSelfLove } from "react-icons/gi";
+
 const Login = () => {
   const [creds, SetCreds] = useState({ username: '', password: '' });
   const [errorMessage, setError] = useState({ title: '', color: 'success', message: null });
@@ -104,7 +107,19 @@ const Login = () => {
   };
 
   return (
-    <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
+
+
+    <div className="w-screen h-screen flex  bg-slate-100">
+        <div className="w-[55%] bg-white h-screen ">
+          <div className="flex justify-center pt-[15rem]">
+            <img src={loginimg}  alt="" className='w-[65%] h-[50%]' />
+          </div>
+        </div>
+        
+        <div className="w-[45%] h-screen">
+        <Link to="/dashboard" ><p className='text-gray-700 p-3 font-extrabold'>demo</p> </Link> 
+         
+        <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
       <div className="bg-gray-100 flex items-center justify-center h-screen">
         <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
           <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
@@ -126,10 +141,10 @@ const Login = () => {
                 <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">Forgot your password?</a>
               </div>
             </div>
-            <button type="submit" className="w-full bg-indigo-600 mb-3 text-white py-3 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Sign in</button>
+            <button type="submit" className="w-full bg-gray-800 mb-3 text-white py-3 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:bg-gray-800">Sign in</button>
             <div className="text-center">
               <p className="text-gray-700">Not registered yet?</p>
-              <Link to="/register">
+              <Link to="/login">
                 <span className="pl-2">Signup</span>
               </Link>
             </div>
@@ -143,7 +158,21 @@ const Login = () => {
         </div>
         <Alertbox errorMessage={errorMessage} />
       </div>
-    </GoogleOAuthProvider>
+        </GoogleOAuthProvider>
+
+          {/* {<Outlet/>} */}
+
+            
+        </div>
+    </div>
+
+
+
+
+
+
+
+   
   );
 };
 

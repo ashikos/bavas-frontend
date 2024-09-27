@@ -46,7 +46,7 @@ const fetchGraphdata = async () => {
 
     return (
 
-        <div className='bg-gray-200 h-[53rem]'>
+        <div className='bg-gray-200 h-[92vh] overflow-x-auto'>
           <div className='h-[5%]'>
           <div className='h-[5%] px-10 py-3 '>
           <Dropdown label={year} dismissOnClick={true} color={""}>
@@ -69,20 +69,20 @@ const fetchGraphdata = async () => {
                   {
                     label: 'Sales',
                     backgroundColor: [
-                      '#7AFF5D',
-                      '#FF6B57',
-                      '#64CEFF',
-                      '#FFC96A',
-                      '#F7A791',
-                      '#BE7BF1'
+                      '#1b263b',
+                      '#1b263b',
+                      '#1b263b',
+                      '#1b263b',
+                      '#1b263b',
+                      '#1b263b'
                     ],
                     hoverBackgroundColor: [
-                    '#8AC27E',
-                    '#BB5A4D',
-                    '#5CAACE',
-                    '#D8A958',
-                    '#C68E7F',
-                    '#9F6CC6'
+                    '#0a0908',
+                    '#0a0908',
+                    '#0a0908',
+                    '#0a0908',
+                    '#0a0908',
+                    '#0a0908'
                     ],
                     data: Object.values(sale)
                   }
@@ -100,20 +100,20 @@ const fetchGraphdata = async () => {
                     {
                       label: 'Sales',
                       backgroundColor: [
-                        '#7AFF5D',
-                        '#FF6B57',
-                        '#64CEFF',
-                        '#FFC96A',
-                        '#F7A791',
-                        '#BE7BF1'
+                        '#212529',
+                        '#343a40',
+                        '#495057',
+                        '#6c757d',
+                        '#adb5bd',
+                        '#ced4da'
                       ],
                       hoverBackgroundColor: [
-                      '#8AC27E',
-                      '#BB5A4D',
-                      '#5CAACE',
-                      '#D8A958',
-                      '#C68E7F',
-                      '#9F6CC6'
+                      '#edf6f9',
+                      '#edf6f9',
+                      '#edf6f9',
+                      '#edf6f9',
+                      '#edf6f9',
+                      '#edf6f9'
                       ],
                       data: Object.values(sale)
                     }
@@ -148,8 +148,8 @@ const fetchGraphdata = async () => {
                       data: month,
                       fill: false,
                       borderWidth:4,
-                      backgroundColor: "#404142",
-                      borderColor:'#2bb821',
+                      backgroundColor: "#1b263b",
+                      borderColor:'#1b263b',
                       responsive:true
                     },
                   ],
