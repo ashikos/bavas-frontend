@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from '../../axios';
 import { useNavigate } from 'react-router';
 import Alertbox from '../../components/utils/Alertbox';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+// import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { GoogleLogin } from 'react-google-login';
 import loginimg from '../../assets/image/loginimg.png'
-import { GiSelfLove } from "react-icons/gi";
+import { gapi } from 'gapi-script';
+
+const clintID = "74542906845-0h476do5p5sle93j8if5mme5p0aqsc2s.apps.googleusercontent.com"
+
+
 
 const Login = () => {
   const [creds, SetCreds] = useState({ username: '', password: '' });
@@ -24,7 +29,7 @@ const Login = () => {
     console.log(creds);
 
     axios
-      .post('bills/login/', creds, {
+      .post('auth/login/', creds, {
         headers: {},
       })
       .then((response) => {
@@ -106,6 +111,16 @@ const Login = () => {
     handleAlertBox();
   };
 
+  useEffect(() =>{
+    function start() {
+      gapi.client.init({
+        clientId:clintID,
+        scope:""
+      })
+    }
+    gapi.load('client:auth2', start);
+  })
+
   return (
 
 
@@ -118,8 +133,8 @@ const Login = () => {
         
         <div className="w-[45%] h-screen">
         <Link to="/dashboard" ><p className='text-gray-700 p-3 font-extrabold'>demo</p> </Link> 
+
          
-        <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
       <div className="bg-gray-100 flex items-center justify-center h-screen">
         <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
           <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
@@ -154,11 +169,12 @@ const Login = () => {
             onFailure={handleGoogleFailure}
             cookiePolicy={'single_host_origin'}
             className="mt-4"
+            isSignedIn={true}
+            clientId={clintID}
           />
         </div>
         <Alertbox errorMessage={errorMessage} />
       </div>
-        </GoogleOAuthProvider>
 
           {/* {<Outlet/>} */}
 

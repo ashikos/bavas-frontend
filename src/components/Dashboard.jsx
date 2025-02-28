@@ -135,28 +135,29 @@ const fetchGraphdata = async () => {
 
           </div>
           </div>
-          <div className="h-[40%] p-5 ">
-          <div className='bg-white h-full w-[100%] rounded-3xl flex justify-center'>
-          <Line
-              data={{
-                // x-axis label values
-                labels: ["Jan", "Feb", "Mar", "Apr", 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                datasets: [
-                  {
-                      label: "Sales per month",
-                      // y-axis data plotting values
-                      data: month,
-                      fill: false,
-                      borderWidth:4,
-                      backgroundColor: "#1b263b",
-                      borderColor:'#1b263b',
-                      responsive:true
-                    },
-                  ],
-                }}
-                width={500} 
-     
-          />
+          <div className="h-[40%] p-5 overflow-hidden">
+          <div className=' bg-white h-full w-[100%] rounded-3xl flex justify-center'>
+            <Line
+                data={{
+                  // x-axis label values
+                  labels: ["Jan", "Feb", "Mar", "Apr", 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                  datasets: [
+                    {
+                        label: "Sales per month",
+                        // y-axis data plotting values
+                        data: month,
+                        fill: false,
+                        borderWidth:4,
+                        backgroundColor: "#1b263b",
+                        borderColor:'#1b263b',
+                        responsive:true
+                      },
+                    ],
+                  }}
+                  width={500} 
+                  
+      
+            />
           </div>
           </div>
         </div>

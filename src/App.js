@@ -21,13 +21,9 @@ function App() {
                     <Route path='customers' element={<Customer/>} />
                 </Route>
                 <Route path='/login' element={<Login/>}>
-                  
-                  
                 </Route>
               </Routes>
             </Router>
-            
-            
     </div>
   );
 }
