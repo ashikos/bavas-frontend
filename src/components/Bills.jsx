@@ -12,7 +12,8 @@ import { IoIosCloseCircleOutline, IoMdPrint } from "react-icons/io";
 import { Button, Modal, FloatingLabel, Datepicker as FlowBiteDate } from 'flowbite-react';
 import { FaRegCheckCircle } from "react-icons/fa";
 
-import axios from "../axios"
+// import axios from "../axios"
+import api from "../axios"
 import Pagination from './shared/Pagination';
 import DatePic from './utils/DatePic';
 import AddInput from './utils/AddInput';
@@ -44,7 +45,7 @@ const Bills = () => {
   const fetchData = async () => {   
     // api to call entries of bavas  
     try {
-        const response = await axios.get(
+        const response = await api.instance.get(
           `/sales/bill/?offset=${paginate["offset"] * paginate["limit"]}&limit=${paginate["limit"]}&search=${keyWrd["search"]}&start_date=${keyWrd["start"]}&end_date=${keyWrd["end"]}`);
         setEntry(response.data.results)
         let entry_count = response.data.count
@@ -96,7 +97,7 @@ const handlePen = async (bill)=> {
     patch_data["date"] = format(data["date"], "yyyy-MM-dd")
     patch_data["items"] = inputs
     
-    axios.patch(`/sales/bill/${id}/`, patch_data)
+    api.instance.patch(`/sales/bill/${id}/`, patch_data)
     .then(response=>{
       console.log('PATCH request successful:', response.data);
       fetchData()
@@ -122,7 +123,7 @@ const handlePen = async (bill)=> {
 
       try {
         // Make the POST request using Axios
-        const response = await axios.post('/sales/bill/', JSON.stringify(add_data), {
+        const response = await api.instance.post('/sales/bill/', JSON.stringify(add_data), {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -149,7 +150,7 @@ const handlePen = async (bill)=> {
     const handleDelete = async (id)=> {
 
       try{
-        axios.delete(
+        api.instance.delete(
           `sales/bill/${id}/`);
       } catch(error){
         console.error('Error uploading data:', error);
@@ -165,7 +166,7 @@ const handlePen = async (bill)=> {
 
 const handlePrint = async(id)=>{
   try{
-    const response = await axios.get(
+    const response = await api.instance.get(
       `/sales/billtopdf/${id}/`, { responseType: 'arraybuffer' }
     )
   console.log(typeof(response.data));

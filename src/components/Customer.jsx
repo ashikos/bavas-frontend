@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { format } from 'date-fns';
 import "react-datepicker/dist/react-datepicker.css";
-
-import {Link } from 'react-router-dom'
 
 import { FaSearch } from "react-icons/fa";
 import { MdEdit, MdDelete } from "react-icons/md";
@@ -12,10 +9,8 @@ import { IoIosCloseCircleOutline, IoMdPrint } from "react-icons/io";
 import { Button, Modal, FloatingLabel, Datepicker as FlowBiteDate } from 'flowbite-react';
 import { FaRegCheckCircle } from "react-icons/fa";
 
-import axios from "../axios"
+import api from "../axios"
 import Pagination from './shared/Pagination';
-import DatePic from './utils/DatePic';
-import AddInput from './utils/AddInput';
 // import DelModal from './utils/DelModal';
 
 const Customer = () => {
@@ -41,7 +36,7 @@ const Customer = () => {
   const fetchData = async () => {   
     // api to call entries of bavas  
     try {
-        const response = await axios.get(
+        const response = await api.instance.get(
           `/sales/customer/?offset=${paginate["offset"] * paginate["limit"]}&limit=${paginate["limit"]}&search=${keyWrd["search"]}`);
         setEntry(response.data.results)
         let entry_count = response.data.count
@@ -86,7 +81,7 @@ const handlePen = async (customer)=> {
   const handleEditButton =  async()=>{
     let id = editModal.id
     
-    axios.patch(`sales/customer/${id}/`, data)
+    api.instance.patch(`sales/customer/${id}/`, data)
     .then(response=>{
       console.log('PATCH request successful:', response.data);
       fetchData()
@@ -106,7 +101,7 @@ const handlePen = async (customer)=> {
       
       try {
         // Make the POST request using Axios
-        const response = await axios.post('sales/customer/', JSON.stringify(data), {
+        const response = await api.instance.post('sales/customer/', JSON.stringify(data), {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -149,7 +144,7 @@ const handlePen = async (customer)=> {
 
 const handleDelete = async (id)=> {
 
-  await axios.delete(
+  await api.instance.delete(
     `sales/customer/${id}/`)
     .catch(error => {
       // Handle error

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Bar, Line, Pie } from 'react-chartjs-2';
-import axios from "../axios"
+// import axios from "../axios"
+import api from "../axios"
 import { Chart as ChartJS } from 'chart.js/auto';
 import { Dropdown } from 'flowbite-react';
 
@@ -28,7 +29,7 @@ const fetchGraphdata = async () => {
   // api to call entries of bavas  
   console.log(year)
   try {
-    const response = await axios.get(
+    const response = await api.instance.get(
       `sales/perfomance/?year=${year}`);
     setMonth(response.data.response.monthly)
     setSale(response.data.response.type_wise)

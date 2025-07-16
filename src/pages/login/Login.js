@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from '../../axios';
-import { useNavigate } from 'react-router';
+// import { instance, loginInstance } from '../../axios';
+import api from '../../axios';
+
 import Alertbox from '../../components/utils/Alertbox';
 // import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { GoogleLogin } from 'react-google-login';
@@ -27,33 +29,26 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(creds);
-
-    axios
-      .post('auth/login/', creds, {
+    
+      api.loginInstance.post('account/login/', creds, {
         headers: {},
       })
       .then((response) => {
         console.log('Post request successful:', response.data);
-        const user_id = response.data.id;
-        const user_type = response.data.user_type;
-        let is_registered = response.data.is_registered;
-        localStorage.setItem('userId', user_id);
-        localStorage.setItem('firstName', response.data.first_name);
-        localStorage.setItem('userType', response.data.user_type);
-        localStorage.setItem('educationId', response.data.advanced_info.education);
-        localStorage.setItem('professionId', response.data.advanced_info.profession);
-        localStorage.setItem('familyId', response.data.advanced_info.family);
-        localStorage.setItem('ClientId', response.data.advanced_info.client);
-        localStorage.setItem('preferenceId', response.data.advanced_info.preference);
-        localStorage.setItem('isEmploy', response.data.is_employ);
+        const userId = response.data.UsrId;
+        const accessToken = response.data.AccessKey;
+        let username = response.data.username;
+        localStorage.setItem('userId', userId);
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('username', username);
 
-        if (user_type === 101) {
-          navigate('/admin/');
-        } else if (user_type === 102) {
-          navigate(`${is_registered ? '/dashboard' : '/user/base/'}`);
-          setError({ title: 'Success', color: 'success', message: 'Logged in successfully' });
-          handleAlertBox();
+        if (accessToken) {
+          navigate('/');
+        }else {
+          navigate('/login')
         }
+        
+        
       })
       .catch((error) => {
         console.error('Error making POST request:', error);
@@ -63,9 +58,9 @@ const Login = () => {
   };
 
   const handleChange = (e) => {
+    
     const { name, value } = e.target;
     SetCreds((prestat) => ({ ...prestat, [name]: value }));
-    console.log(creds);
   };
 
   const handleGoogleSuccess = (response) => {
@@ -140,8 +135,8 @@ const Login = () => {
           <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label htmlFor="email" className="block text-md font-medium text-gray-700 mb-2">Email</label>
-              <input type="email" id="email" name="username" onChange={handleChange} className="block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+              <label htmlFor="email" className="block text-md font-medium text-gray-700 mb-2">Username</label>
+              <input type="text" id="username" name="username" onChange={handleChange} className="block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
             </div>
             <div className="mb-6">
               <label htmlFor="password" className="block text-md font-medium text-gray-700 mb-2">Password</label>

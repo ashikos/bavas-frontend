@@ -13,6 +13,7 @@ import { FloatingLabel } from 'flowbite-react';
 import  {Datepicker as FlowBiteDate}  from 'flowbite-react';
 
 import axios from "../axios"
+import api from "../axios"
 import Pagination from './shared/Pagination';
 import File from './utils/File';
 import DatePic from './utils/DatePic';
@@ -49,7 +50,7 @@ const Service = () => {
   const fetchData = async () => {   
     // api to call entries of bavas  
     try {
-        const response = await axios.get(
+        const response = await api.instance.get(
           `sales/entry/?offset=${paginate["offset"] * paginate["limit"]}&limit=${paginate["limit"]}&year=${year}&search=${keyWrd["search"]}&start_date=${keyWrd["start"]}&end_date=${keyWrd["end"]}`);
         setEntry(response.data.results)
         console.log(entry);
@@ -112,7 +113,7 @@ const handlePen = async (item)=> {
       console.log('form data is', excel["date"])
 
 
-        axios.post('sales/excel/', formData)
+      api.instance.post('sales/excel/', formData)
         .then(response => {
           // Handle success response
           console.log('File uploaded successfully');
@@ -136,7 +137,7 @@ const handlePen = async (item)=> {
     let id = editModal.id
     let patch_data = data
     patch_data["date"] = format(data["date"], "yyyy-MM-dd")
-    axios.patch(`sales/entry/${id}/`, patch_data)
+    api.instance.patch(`sales/entry/${id}/`, patch_data)
     .then(response=>{
       console.log('PATCH request successful:', response.data);
       fetchData()
@@ -163,7 +164,7 @@ const handlePen = async (item)=> {
       console.log(data);
       try {
         // Make the POST request using Axios
-        const response = await axios.post('sales/entry/', data, {
+        const response = await api.instance.post('sales/entry/', data, {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -188,7 +189,7 @@ const handlePen = async (item)=> {
 const handleDelete = async (id)=> {
 
   try{
-    axios.delete(
+    api.instance.delete(
       `sales/entry/${id}/`);
   } catch(error){
     console.error('Error uploading data:', error);
