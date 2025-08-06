@@ -11,14 +11,15 @@ import { IoIosCloseCircleOutline, IoMdPrint } from "react-icons/io";
 
 import { Button, Modal, FloatingLabel, Datepicker as FlowBiteDate } from 'flowbite-react';
 import { FaRegCheckCircle } from "react-icons/fa";
+import { pdf } from '@react-pdf/renderer';
 
 // import axios from "../axios"
 import api from "../axios"
 import Pagination from './shared/Pagination';
 import DatePic from './utils/DatePic';
 import AddInput from './utils/AddInput';
+import MyInvoice from './PDFView';
 // import DelModal from './utils/DelModal';
-
 
 const Bills = () => {
   
@@ -109,6 +110,13 @@ const handlePen = async (bill)=> {
     
   }
 
+  const handleOpenPDF = async (add_data) => {
+    const blob = await pdf(<MyInvoice {...add_data} />).toBlob();
+    const url = URL.createObjectURL(blob);
+    window.open(url); // Open PDF in new tab
+  };
+
+
   const handleAddButton = async ()=> {
 
       if ((data['customer']==="") && (data['reg_no']==="") ) {
@@ -118,7 +126,8 @@ const handlePen = async (bill)=> {
       add_data["items"] = inputs
       add_data["amount"] = t_amount
 
-      console.log(add_data);
+      // console.log(add_data);
+      handleOpenPDF(add_data);
       
 
       try {

@@ -15,7 +15,7 @@ instance.interceptors.request.use(
             
             config.headers.Bearer = `${token}`;
         }else{
-            window.location.href = '/login/';
+            // window.location.href = '/login/';
         }
         return config;
     },
